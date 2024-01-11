@@ -17,14 +17,21 @@ class Recipe:
     ingredients = []
     instructions = []
 
-    def add_ingredient(self, product:Product):
-        self.ingredients.append(product)
+    def add_ingredient(self, product: Product, quantity: float ):
+        self.ingredients.append((product, quantity))
 
     def change_ingredient_quantity(self, ingredient_id:int, new_quantity:float):
         self.ingredients[ingredient_id].quantity = new_quantity
 
     def remove_ingredient(self, ingredient_id:int):
         self.ingredients.pop(ingredient_id)
+
+
+    def print_contents(self):
+            print("Recipe Ingredients:")
+            for ingredient, quantity in self.ingredients:
+               print(f"{ingredient.name}: {quantity}")
+   
 
 
 class Fridge:
@@ -46,18 +53,85 @@ class Fridge:
         else:
             self.contents.append(Product(name, quantity))
 
-    def remove_product(self, name:str, quantity:float):
-        pass
+    def remove_product(self, name: str, quantity: float):
+        product_id, product = self.check_product(name)    
+        if product is not None:
+            product.quantity -= quantity                 
+        if product.quantity <= 0:                     
+            self.contents.pop(product_id)             
+        else:
+           self.contents.remove(Product(name, quantity))
+                
 
     def print_contents(self):
-        pass
+            print("Fridge Contents:")
+            for product in self.contents:                   
+                print(product)
 
-    def check_recipe(self, recipe:Recipe):
-        pass
 
+    def check_recipe(self, recipe: Recipe):
+        for ingredient in recipe.ingredients:
+            product_id, product = self.check_product(ingredient.name)
+            if product is None or product.quantity < ingredient.quantity:
+                print("All ingredients in the fridge.")    
+            else:
+                print("Is not enough {product} in the fridge")   
 
+    def print_recipe_ingridients(self):
+            print("Recipe ingridients:")   
+            for ingredient in self.contents:  
+                print(ingredients)        
+                
+ 
 def main():
     fridge = Fridge()
+    recipe = Recipe()
+
+    while True:
+        print('---Fridge---')
+        print('0: exit')
+        print('1: add product')
+        print('2: remove product ')
+        print('3: check product')
+        print('4: check quantity')
+        print('5: print fridge contents')
+        print('6: check recipe')
+        choice = input('Choice 0-6')
+        if choice == "0":
+           break
+        elif choice == 1:
+            name = input('Product name:')
+            quantity = input('Product quantity:')
+            fridge.add_product(name, quantity)
+        elif choice == 2: 
+            name = input('Product name:')
+            quantity = input('Product quantity:')
+            fridge.remove_product(name, quantity) 
+        elif choice == 3: 
+            product_name = input('Product name:')
+            product_id, product = fridge.check_product(product_name)
+            if product is not None:
+                print(f'{product_name} is in the fridge')
+            else:
+                print(f'{product_name} is not found in the fridge') 
+        elif choice == 4: 
+            name = input('Product:')
+            product_id, product = fridge.check_product(name)
+            if product is not None:
+                print(f'{product.name} {product.quantity}')
+            else:
+                print(f'{product_name} is not found in the fridge')               
+
+
+
+
+    
+
+
+    
+
+
+
     # meniukas | vartotojo sasaja
 
 # apple = Product('apple', 1)
