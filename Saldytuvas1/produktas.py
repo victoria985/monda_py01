@@ -1,4 +1,0 @@
-from produktas import Product
-
-
-
